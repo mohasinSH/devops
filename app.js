@@ -4,6 +4,8 @@ const port =  8000
 const password = 'WAbF3wEhqHA4YjGA'
 const uri = `mongodb+srv://aws-user:${password}@aws-test-cluster.ungtg.mongodb.net/mern`
 mongoose.connect(uri)
+
+
 http.listen(port,()=>{
 console.log(`the server is litsening to port ${port}`)
 })
@@ -15,9 +17,19 @@ async function connection(){
         name:String,
         phone:Number
     })
-    const model = mongoose.model('USERS',Schema)
+    var model = mongoose.model('USERS',Schema)
 
-    const user =new  model({name:'Mohasin',phone:123490})
+    const user = new model({name:'Mohasin',phone:123490})
     await user.save()
+
+    http.get('/',async (req,res)=>{
+        await model.find().then(resp=>{
+         res.json(resp)
+         })
+         
+     })
+
 }
-connection().catch(err => console.log(err))
+
+connection()
+
